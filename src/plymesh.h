@@ -24,8 +24,6 @@ namespace agl {
       // Returns true if successfull. false otherwise.
       bool load(const std::string& filename);
 
-      void clear();
-
       // Return the minimum point of the axis-aligned bounding box
       glm::vec3 minBounds() const;
 
@@ -47,6 +45,8 @@ namespace agl {
       // face indices in this model
       const std::vector<GLuint>& indices() const;
 
+      void PLYMesh::clear();
+
    protected:
       void init();
 
@@ -54,14 +54,6 @@ namespace agl {
       std::vector<GLfloat>_positions;
       std::vector<GLfloat>_normals;
       std::vector<GLuint>_faces;
-      glm::vec3 mb;
-      glm::vec3 mnb;
-      GLfloat mx=-1000;
-      GLfloat my=-1000;
-      GLfloat mz=-1000;
-      GLfloat mnx=1000;
-      GLfloat mny=1000;
-      GLfloat mnz=1000;
    };
 
    
