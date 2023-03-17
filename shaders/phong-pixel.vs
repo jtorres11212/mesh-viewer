@@ -9,7 +9,11 @@ uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 uniform bool HasUV;
 
+out vec3 n;
+out vec4 p
 void main()
 {
+   n=normalize(NormalMatrix*vNormals);
+   p=ModelViewMatrix*vec4(vPos,1.0);
    gl_Position = MVP * vec4(vPos, 1.0);
 }
