@@ -21,6 +21,9 @@ public:
 
     void setup(){
         files=GetFilenamesInDir("../models","ply");
+        renderer.loadShader("normals", "../shaders/normals.vs", "../shaders/normals.fs");
+        //renderer.loadShader("phong-vertex", "../shaders/phong-vertex.vs", "../shaders/phong-vertex.fs");
+        renderer.loadShader("phong-pixel", "../shaders/phong-pixel.vs", "../shaders/phong-pixel.fs");
         for(string crnt:files){
             PLYMesh eachFile;
             eachFile.load("../models/"+crnt);
@@ -55,10 +58,9 @@ public:
         float z=r*cos(az)*cos(vp);
         eyePos=vec3(x,y,z);
     }
-
     void keyUp(int key,int mods){
         if(key==GLFW_KEY_N){
-            rend=(rend+1) % meshes.size();
+            rend=(rend+1)%meshes.size();
         }
         else if(key==GLFW_KEY_M){
             if(rend!=0){
@@ -68,9 +70,22 @@ public:
                 rend=meshes.size()-1;
             }
         }
+        else if(key==GLFW_KEY_S){
+            sh+=1;
+            if(sh>=shdr.size()){
+                sh=0;
+            }
+        }
     }
-
     void draw(){
+        renderer.beginShader(shdr[sh]);
+        renderer.setUniform("ramb", vec3(0.1f));
+        renderer.setUniform("rdiff", vec3(0.3f));
+        renderer.setUniform("rspec", vec3(0.6f));
+        renderer.setUniform("fexp", 30.1f);
+        renderer.setUniform("amb", vec3(0.5f));
+        renderer.setUniform("diff", vec3(0.8f));
+        renderer.setUniform("spec", vec3(0.4f));
         std::cout << files[rend] << std::endl;
         mesh=meshes[rend];
         float aspect=((float)width())/height();
@@ -100,13 +115,15 @@ public:
         renderer.scale(vec3(v1,v2,v3));
         renderer.translate(vec3(0,0,0));
         renderer.lookAt(eyePos,lookPos,up);
-
         renderer.mesh(mesh);
-        //renderer.cube(); // for debugging!
+        //renderer.cube(); // for debugging! 
+        renderer.endShader();
     }
 
 protected:
     std::vector<string> files=GetFilenamesInDir("../models","ply");
+    std::vector<string> shdr={"normals","phong-vertex","phong-pixel"};
+    int sh=0;
     PLYMesh mesh;
     std::vector<PLYMesh> meshes;
     vec3 eyePos=vec3(10,0,0);
