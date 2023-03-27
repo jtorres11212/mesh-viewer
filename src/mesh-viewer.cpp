@@ -24,12 +24,16 @@ public:
         renderer.loadShader("normals", "../shaders/normals.vs", "../shaders/normals.fs");
         //renderer.loadShader("phong-vertex", "../shaders/phong-vertex.vs", "../shaders/phong-vertex.fs");
         renderer.loadShader("phong-pixel", "../shaders/phong-pixel.vs", "../shaders/phong-pixel.fs");
+        renderer.loadShader("texture","../shaders/texture.vs","../shaders/texture.fs");
         for(string crnt:files){
             PLYMesh eachFile;
             eachFile.load("../models/"+crnt);
             meshes.push_back(eachFile);
         }
+        textures.push_back("obunga.png");
+        renderer.loadTexture("obunga","../textures/obunga.png",0);
         mesh=meshes[0];
+        
     }
 
     void mouseMotion(int x,int y,int dx,int dy){
@@ -79,13 +83,14 @@ public:
     }
     void draw(){
         renderer.beginShader(shdr[sh]);
-        renderer.setUniform("ramb", vec3(0.1f));
-        renderer.setUniform("rdiff", vec3(0.3f));
-        renderer.setUniform("rspec", vec3(0.6f));
-        renderer.setUniform("fexp", 30.1f);
-        renderer.setUniform("amb", vec3(0.5f));
-        renderer.setUniform("diff", vec3(0.8f));
-        renderer.setUniform("spec", vec3(0.4f));
+        renderer.texture("diffuseTexture","obunga.png");
+        renderer.setUniform("l.a",vec3(0.5f,0.8f,0.5f));
+        renderer.setUniform("l.d",vec3(0.5f,0.8f,0.5f));
+        renderer.setUniform("l.s",vec3(0.5f,0.8f,0.5f));
+        renderer.setUniform("r.ra",vec3(0.1f));
+        renderer.setUniform("r.rd",vec3(1.0f));
+        renderer.setUniform("r.rs",vec3(0.6f));
+        renderer.setUniform("r.fexp",44.4f);
         std::cout << files[rend] << std::endl;
         mesh=meshes[rend];
         float aspect=((float)width())/height();
@@ -122,7 +127,8 @@ public:
 
 protected:
     std::vector<string> files=GetFilenamesInDir("../models","ply");
-    std::vector<string> shdr={"normals","phong-vertex","phong-pixel"};
+    std::vector<string> shdr={"normals","phong-pixel","texture"};
+    std::vector<string> textures={"obunga.png"}; 
     int sh=0;
     PLYMesh mesh;
     std::vector<PLYMesh> meshes;

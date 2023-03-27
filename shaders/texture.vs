@@ -9,8 +9,11 @@ uniform mat4 ModelViewMatrix;
 uniform mat4 MVP;
 out vec3 pos;
 out vec3 nor;
+out vec2 uv;
+
 
 void main(){
+   uv=vTextureCoords;
    nor = normalize(NormalMatrix * vNormals);
    pos = vec3(ModelViewMatrix * vec4(vPos,1.0));
    gl_Position = MVP * vec4(vPos, 1.0);
