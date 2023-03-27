@@ -30,7 +30,6 @@ public:
             eachFile.load("../models/"+crnt);
             meshes.push_back(eachFile);
         }
-        textures.push_back("obunga.png");
         renderer.loadTexture("obunga","../textures/obunga.png",0);
         mesh=meshes[0];
         
@@ -83,7 +82,7 @@ public:
     }
     void draw(){
         renderer.beginShader(shdr[sh]);
-        renderer.texture("diffuseTexture","obunga.png");
+        renderer.texture("diffuseTexture",textures[0]);
         renderer.setUniform("l.a",vec3(0.5f,0.8f,0.5f));
         renderer.setUniform("l.d",vec3(0.5f,0.8f,0.5f));
         renderer.setUniform("l.s",vec3(0.5f,0.8f,0.5f));
