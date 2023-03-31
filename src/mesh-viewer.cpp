@@ -25,12 +25,16 @@ public:
         //renderer.loadShader("phong-vertex", "../shaders/phong-vertex.vs", "../shaders/phong-vertex.fs");
         renderer.loadShader("phong-pixel", "../shaders/phong-pixel.vs", "../shaders/phong-pixel.fs");
         renderer.loadShader("texture","../shaders/texture.vs","../shaders/texture.fs");
+        //renderer.loadTexture("diffuseTexture","../textures/obunga.png",0);
+        renderer.loadTexture("obunga","../textures/obunga.png",0);
+
+        renderer.loadShader("unlit","../shaders/unlit.vs","../shaders/unlit.fs");
+        renderer.loadShader("lights","../shaders/lights.vs","../shaders/lights.fs");
         for(string crnt:files){
             PLYMesh eachFile;
             eachFile.load("../models/"+crnt);
             meshes.push_back(eachFile);
         }
-        renderer.loadTexture("obunga","../textures/obunga.png",0);
         mesh=meshes[0];
         
     }
@@ -82,14 +86,23 @@ public:
     }
     void draw(){
         renderer.beginShader(shdr[sh]);
-        renderer.texture("diffuseTexture",textures[0]);
+        renderer.texture("diffuseTexture",txtrs[0]);
+        renderer.setUniform("l.pos",vec4(0.5f,1.0f,1.0f,1.0));
         renderer.setUniform("l.a",vec3(0.5f,0.8f,0.5f));
         renderer.setUniform("l.d",vec3(0.5f,0.8f,0.5f));
         renderer.setUniform("l.s",vec3(0.5f,0.8f,0.5f));
-        renderer.setUniform("r.ra",vec3(0.1f));
+        renderer.setUniform("l2.pos2",vec4(1.0f,1.0f,1.0f,1.0f));
+        renderer.setUniform("l2.a2",vec3(0.7f,0.8f,0.8f));
+        renderer.setUniform("l2.d2",vec3(0.7f,0.8f,0.8f));
+        renderer.setUniform("l2.s2",vec3(0.7f,0.8f,0.8f));
+        renderer.setUniform("l3.pos3",vec4(1.0f,0.4f,0.3f,1.0f));
+        renderer.setUniform("l3.a3",vec3(1.0f,0.4f,0.3f));
+        renderer.setUniform("l3.d3",vec3(1.0f,0.4f,0.3f));
+        renderer.setUniform("l3.s3",vec3(1.0f,0.4f,0.3f));
+        renderer.setUniform("r.ra",vec3(1.0f));
         renderer.setUniform("r.rd",vec3(1.0f));
-        renderer.setUniform("r.rs",vec3(0.6f));
-        renderer.setUniform("r.fexp",44.4f);
+        renderer.setUniform("r.rs",vec3(1.0f));
+        renderer.setUniform("r.fexp",10.0f);
         std::cout << files[rend] << std::endl;
         mesh=meshes[rend];
         float aspect=((float)width())/height();
@@ -126,8 +139,8 @@ public:
 
 protected:
     std::vector<string> files=GetFilenamesInDir("../models","ply");
-    std::vector<string> shdr={"normals","phong-pixel","texture"};
-    std::vector<string> textures={"obunga.png"}; 
+    std::vector<string> shdr={"normals","phong-pixel","unlit","lights","texture"};
+    std::vector<string> txtrs={"obunga"}; 
     int sh=0;
     PLYMesh mesh;
     std::vector<PLYMesh> meshes;

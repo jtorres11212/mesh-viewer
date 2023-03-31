@@ -28,6 +28,7 @@ namespace agl{
    }
    bool PLYMesh::load(const std::string& filename){
       int numv,numf,vx,vy,vz,v,cnt;
+      
       float x1,x2,y1,y2,z1,z2;
       if (_positions.size() != 0) {
          std::cout << "WARNING: Cannot load different files with the same PLY mesh\n";
@@ -41,22 +42,24 @@ namespace agl{
       if (!std::getline(f,dad)||dad!="ply") {
          return false;
       }
-      while(std::getline(f,dad)||dad!="end_header"){
+      while(std::getline(f,dad)&&dad!="end_header"){
          std::string str;
          std::istringstream curr(dad);
-         str>>curr;
+         printf("%s\n",dad.c_str());
+         curr>>str;
       
-      if(curr=="element"){
-         int num;
-         std::string elem;
-         str>>elem>>num;
-         if (elem=="vertex"){
-            numv=num;
+         if(str=="element"){
+            int num;
+            std::string elem;
+            curr>>elem>>num;
+            if (elem=="vertex"){
+               numv=num;
+            }
+            else if(elem=="face"){
+               numf=num;
+            }
          }
-         else if(elem=="face"){
-            numf==num;
-         }
-      }
+         
    }
    for (int i=0;i<numv;i++){
       std::getline(f,dad);
@@ -141,5 +144,14 @@ namespace agl{
    const std::vector<GLuint>& PLYMesh::indices() const{
       return _faces;
    }
+   /**float uvcalc(w,h,x,y,pic,pc){
+      renderer.loadTexture(pic,pc)//loads png for texture
+      float u,v;
+      //set w and h = to width/ height of photo and add parameter to read in photo
+      u=x/w;
+      v=y/h;
+      return(u,v);
+
+   }**/
 }
 

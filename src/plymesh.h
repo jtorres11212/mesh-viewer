@@ -45,7 +45,9 @@ namespace agl {
       // face indices in this model
       const std::vector<GLuint>& indices() const;
 
-      void PLYMesh::clear();
+      /**float uvcalc(float w,float h,float x,float y,const std::string& pic,const std::string& pc);
+**/
+      void clear();
 
    protected:
       void init();
@@ -54,6 +56,7 @@ namespace agl {
       std::vector<GLfloat>_positions;
       std::vector<GLfloat>_normals;
       std::vector<GLuint>_faces;
+      float w,h;
    };
 
    
